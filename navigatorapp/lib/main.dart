@@ -209,3 +209,33 @@ class ProductDetailsPage extends StatelessWidget {
     );
   }
 }
+
+// ---------------- STAR RATING ----------------
+class RatingBox extends StatefulWidget {
+  const RatingBox({super.key});
+ 
+  @override
+  State<RatingBox> createState() => _RatingBoxState();
+}
+ 
+class _RatingBoxState extends State<RatingBox> {
+  int _rating = 0;
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(3, (i) {
+        return IconButton(
+          iconSize: 20,
+          padding: EdgeInsets.zero,
+          constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
+          color: Colors.red[500],
+          icon: Icon(i < _rating ? Icons.star : Icons.star_border),
+          onPressed: () => setState(() => _rating = i + 1),
+        );
+      }),
+    );
+  }
+}
