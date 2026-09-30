@@ -138,3 +138,74 @@ class ProductBox extends StatelessWidget {
     );
   }
 }
+
+// ---------------- COLOURED BOX ----------------
+class ColorBox extends StatelessWidget {
+  final Product product;
+  final double? width;
+  final double? height;
+  final double fontSize;
+ 
+  const ColorBox({
+    super.key,
+    required this.product,
+    this.width,
+    this.height,
+    required this.fontSize,
+  });
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      color: product.color,
+      alignment: Alignment.center,
+      child: Text(
+        product.label,
+        style: TextStyle(color: Colors.white, fontSize: fontSize),
+      ),
+    );
+  }
+}
+ 
+// ---------------- DETAILS PAGE ----------------
+class ProductDetailsPage extends StatelessWidget {
+  final Product product;
+  const ProductDetailsPage({super.key, required this.product});
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // AppBar adds the back arrow automatically -> returns to home page
+      appBar: AppBar(title: Text(product.name)),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ColorBox(product: product, height: 250, fontSize: 60),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Text(product.name,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18)),
+                  const SizedBox(height: 40),
+                  Text(product.description, textAlign: TextAlign.center),
+                  const SizedBox(height: 40),
+                  Text('Price: ${product.price}'),
+                  const SizedBox(height: 40),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: RatingBox(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
