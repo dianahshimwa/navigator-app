@@ -26,6 +26,7 @@ class Product {
   final String description;
   final int price;
   final Color color;
+  final String image;
 
   const Product({
     required this.name,
@@ -33,6 +34,7 @@ class Product {
     required this.description,
     required this.price,
     required this.color,
+    required this.image,
   });
 }
 
@@ -43,6 +45,7 @@ const List<Product> products = [
     description: 'Pixel is the most featureful phone ever',
     price: 800,
     color: Colors.blue,
+    image: 'https://res.cloudinary.com/dl2fjmhft/image/upload/w_600,q_auto,f_auto/v1790929097/pexels-richard-l-2150581203-32218867_n3dizm.jpg'
   ),
   Product(
     name: 'Laptop',
@@ -50,6 +53,7 @@ const List<Product> products = [
     description: 'Laptop is most productive development tool',
     price: 2000,
     color: Colors.green,
+    image: 'https://res.cloudinary.com/dl2fjmhft/image/upload/w_600,q_auto,f_auto/v1790929094/pexels-pavel-danilyuk-7190953_emrbmi.jpg'
   ),
   Product(
     name: 'Tablet',
@@ -57,6 +61,7 @@ const List<Product> products = [
     description: 'Tablet is the most useful device ever for meeting',
     price: 1500,
     color: Color(0xFFCDDC39),
+    image:'https://res.cloudinary.com/dl2fjmhft/image/upload/w_600,q_auto,f_auto/v1790929098/pexels-mallonymedia-6849081_aiaxwt.jpg'
   ),
   Product(
     name: 'Pendrive',
@@ -64,6 +69,7 @@ const List<Product> products = [
     description: 'Pendrive is useful storage medium',
     price: 100,
     color: Colors.redAccent,
+    image: 'https://res.cloudinary.com/dl2fjmhft/image/upload/w_600,q_auto,f_auto/v1790929094/pexels-ruben-boekeloo-521336009-18641665_wkrb2g.jpg'
   ),
   Product(
     name: 'Floppy Drive',
@@ -71,6 +77,7 @@ const List<Product> products = [
     description: 'Floppy drive is useful rescue storage medium',
     price: 20,
     color: Colors.teal,
+    image: 'https://res.cloudinary.com/dl2fjmhft/image/upload/w_600,q_auto,f_auto/v1790929094/pexels-nicolas-foster-65973708-38117132_tjoloj.jpg'
   ),
 ];
 
@@ -145,7 +152,7 @@ class ColorBox extends StatelessWidget {
   final double? width;
   final double? height;
   final double fontSize;
- 
+
   const ColorBox({
     super.key,
     required this.product,
@@ -153,17 +160,34 @@ class ColorBox extends StatelessWidget {
     this.height,
     required this.fontSize,
   });
- 
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: width,
       height: height,
-      color: product.color,
-      alignment: Alignment.center,
-      child: Text(
-        product.label,
-        style: TextStyle(color: Colors.white, fontSize: fontSize),
+      child: Image.network(
+        product.image,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, progress) {
+          if (progress == null) return child;
+          return Container(
+            color: product.color,
+            alignment: Alignment.center,
+            child: const CircularProgressIndicator(color: Colors.white),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          debugPrint('Image failed for ${product.name}: $error');
+          return Container(
+            color: product.color,
+            alignment: Alignment.center,
+            child: Text(
+              product.label,
+              style: TextStyle(color: Colors.white, fontSize: fontSize),
+            ),
+          );
+        },
       ),
     );
   }
